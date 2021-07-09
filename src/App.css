@@ -1,38 +1,93 @@
-.App {
+html {
+  height: 100%;
+}
+
+.playlistContainer {
+  width: 100%;
+  overflow: hidden;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.playlist {
+  z-index: 20;
+  position: relative;
+  text-align: center;
+  color: white;
+  display: inline-block;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #1DB954;
+  border-radius: 5px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.spotifyLoginContainer {
+  z-index: 20;
+  position: relative;
+  margin: auto;
+  width: 15%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+._3xrlJ {
+  background-color: #1db954;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  min-height: 32px;
+  border: none;
+  border-radius: 0.2rem;
+  font-size: 15px;
+  width: 100%;
+}
+
+._1JCP_ {
+  padding: 0.25rem 0.5rem;
+  height: 1.5rem;
+  fill: #fff;
+  width:2em;
+}
+
+.siteName {
+  text-align: center;
+  margin-top: 15%;
+}
+
+img {
+  z-index: 20;
+  object-fit: cover;
+  width: 225px;
+  height: 225px;
+}
+
+li {
+  background-color: white;
+}
+
+p {
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.bigText {
+  color: white;
+  font-size: 60px;
+  text-shadow: 1px 1px 100px #d3d3d3;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.loader {
+  display: inline-block;
+  border: 15px solid #f3f3f3;
+  border-top: 15px solid #1DB954;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
