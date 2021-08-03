@@ -1,6 +1,5 @@
 import './App.css'
 import './background.sass'
-import { SpotifyApiContext } from 'react-spotify-api'
 import { SpotifyAuth} from 'react-spotify-auth'
 import Cookies from 'js-cookie'
 import {
@@ -34,16 +33,16 @@ function App() {
             <Route path="/playlists">
               {token ? (
                 <div>
-                  <nav>
-                    <ul>
-                        <li>
-                          <Link to="/search">Search</Link>
-                        </li>
-                        <li>
-                          <Link to="/">Home</Link>
-                        </li>
-                    </ul>
-                  </nav>
+                  {/* <nav> */}
+                  {/*   <ul> */}
+                  {/*       <li> */}
+                  {/*         <Link to="/search">Search</Link> */}
+                  {/*       </li> */}
+                  {/*       <li> */}
+                  {/*         <Link to="/">Home</Link> */}
+                  {/*       </li> */}
+                  {/*   </ul> */}
+                  {/* </nav> */}
                   <Playlists token={token}/>
                 </div>
               ) : (
@@ -53,7 +52,7 @@ function App() {
 
             <Route path="/search">
               {token ? (
-                <SpotifyApiContext.Provider value={token}>
+                <div>
                   <nav>
                     <ul>
                       <li>
@@ -65,9 +64,8 @@ function App() {
                     </ul>
                   </nav>
 
-                  <p>search page</p>
-                  <Search/>
-                </SpotifyApiContext.Provider>
+                  <Search token={token}/>
+                </div>
               ) : (
                   <Redirect to="/"/>
               )}
@@ -84,7 +82,7 @@ function App() {
                           className="spotifyLoginButton"
                           redirectUri={'http://localhost:5000'}
                           clientID={process.env.REACT_APP_SPOTIFY_CLIENT_ID}
-                          scopes={['playlist-read-collaborative', 'playlist-read-private']}
+                          scopes={['playlist-read-collaborative', 'playlist-read-private', 'user-library-read']}
                         />
                       </div>
                     </Login>
