@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SpotifyApiContext } from 'react-spotify-api'
-import { PlaylistTracks } from 'react-spotify-api'
+import { getLyrics } from 'genius-lyrics-api';
 import {
   Redirect,
   useLocation
@@ -10,8 +10,10 @@ import {
 const Search = (props) => {
     const location = useLocation();
     const [songs, setSongs] = useState([]);
-    const [lyrics, setLyrics] = useState([]);
+    const [songLyrics, setSongLyrics] = useState([]);
     const [songLoading, setSongLoading] = useState(false);
+
+    const spotifyApiLink = "https://api.spotify.com/v1/playlists/";
 
     // Necessary to access the "next" attribute in the paginated json and get more than 100 tracks
     async function getNext100(link){
@@ -27,17 +29,26 @@ const Search = (props) => {
         });
     }
 
-    // TODO clear songs data first to prevent duplicates?
     async function getTracks(playlistId){
-        let initialFetch = await getNext100("https://api.spotify.com/v1/playlists/" + playlistId);
+        // if we've already loaded the songs 
+        if(songs.length > 0){
+          setSongLoading(false);
+          return;
+        }
+        let initialFetch = await getNext100(spotifyApiLink + playlistId);
         let curData = initialFetch.tracks;
         let songsProcessed = 0;
         let totSongs = curData.total;
+        // reset the songs array just in case
+        setSongs([]);
+
         console.log("Total songs: " + totSongs);
 
+        // TODO remove (hey oh) in snow (hey oh) because it messes with the search
         for(let track of curData.items){
           // console.log(makeSongObject(track.track.name, track.track.artists[0].name, track.track.name));
           setSongs(oldArray => [...oldArray, makeSongObject(track.track.name, track.track.artists[0].name, track.track.id)]);
+          await getTrackLyrics(track.track.name, track.track.artists[0].name, track.track.id);
           songsProcessed += 1;
         }
 
@@ -48,32 +59,59 @@ const Search = (props) => {
 
           for(let track of curData.items){
             setSongs(oldArray => [...oldArray, makeSongObject(track.track.name, track.track.artists[0].name, track.track.id)]);
+            await getTrackLyrics(track.track.name, track.track.artists[0].name, track.track.id);
             songsProcessed += 1;
           }
         }
         setSongLoading(false);
     }
 
+    async function getTrackLyrics(trackName, trackArtist, trackId){
+        let geniusOptions = {
+          // TODO move api key to process.env
+          apiKey: process.env.REACT_APP_GENIUS_TOKEN,
+          title: trackName,
+          artist: trackArtist,
+          optimizeQuery: true,
+        };
+        console.log(geniusOptions);
+
+        getLyrics(geniusOptions).then((lyrics) => setSongLyrics(oldArray => [...oldArray, makeLyricsObject(trackName, lyrics, trackId)]));
+    }
+
     function makeSongObject(songName, songArtist, songId){
       return {name: songName, artist: songArtist, id: songId};
     }
 
+    function makeLyricsObject(songName, songLyrics, songId){
+      return {name: songName, lyrics: songLyrics, id: songId};
+    }
+  
     useEffect(() => {
       setSongLoading(true);
       getTracks(location.state.playlistId);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }  , []);
-    // either programmatically generate the playlisttracks tags for all offsets or do all fetching myself
+
+    // useEffect(() => {
+    //   getTrackLyrics();
+    // }  , [songs]);
+
     return (
         <SpotifyApiContext.Provider value={props.token}>
           {location.state ? (
             <div>
               <p>Songs length: {songs.length}</p>
-              {/* <div> */}
-              {/*   {songs.map(entry => */}
-              {/*     <p>{entry.name}</p> */}
-              {/*   )} */}
-              {/* </div> */}
+              <p>Lyrics length: {songLyrics.length}</p>
+              <div>
+                {songLyrics.map(entry =>
+                  <details key={entry.name}>
+                      <summary>{entry.name}</summary>
+
+                      <p>{entry.lyrics}</p>
+                  </details>
+                )}
+              </div>
 
               {songLoading ? (
                 <div className="loader"></div>
@@ -85,7 +123,7 @@ const Search = (props) => {
               <Redirect to="/playlists"/>
           )}
         </SpotifyApiContext.Provider>
-
+        
     );
 }
 

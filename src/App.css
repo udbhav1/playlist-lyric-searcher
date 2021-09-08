@@ -77,6 +77,10 @@ p {
   color: white;
 }
 
+summary {
+  color: white;
+}
+
 .bigText {
   color: white;
   font-size: 60px;
