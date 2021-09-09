@@ -1,5 +1,5 @@
-import './App.css'
-import './background.sass'
+import '../styles/App.css'
+import '../styles/background.sass'
 import { SpotifyAuth} from 'react-spotify-auth'
 import Cookies from 'js-cookie'
 import {

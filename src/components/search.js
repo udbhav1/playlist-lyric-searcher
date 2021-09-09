@@ -12,6 +12,7 @@ const Search = (props) => {
     const [songs, setSongs] = useState([]);
     const [songLyrics, setSongLyrics] = useState([]);
     const [songLoading, setSongLoading] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const spotifyApiLink = "https://api.spotify.com/v1/playlists/";
 
@@ -44,7 +45,6 @@ const Search = (props) => {
 
         console.log("Total songs: " + totSongs);
 
-        // TODO remove (hey oh) in snow (hey oh) because it messes with the search
         for(let track of curData.items){
           // console.log(makeSongObject(track.track.name, track.track.artists[0].name, track.track.name));
           setSongs(oldArray => [...oldArray, makeSongObject(track.track.name, track.track.artists[0].name, track.track.id)]);
@@ -68,9 +68,8 @@ const Search = (props) => {
 
     async function getTrackLyrics(trackName, trackArtist, trackId){
         let geniusOptions = {
-          // TODO move api key to process.env
           apiKey: process.env.REACT_APP_GENIUS_TOKEN,
-          title: trackName,
+          title: cleanSongName(trackName),
           artist: trackArtist,
           optimizeQuery: true,
         };
@@ -80,22 +79,28 @@ const Search = (props) => {
     }
 
     function makeSongObject(songName, songArtist, songId){
-      return {name: songName, artist: songArtist, id: songId};
+        return {name: songName, artist: songArtist, id: songId};
     }
 
     function makeLyricsObject(songName, songLyrics, songId){
-      return {name: songName, lyrics: songLyrics, id: songId};
+        return {name: songName, lyrics: songLyrics, id: songId};
+    }
+
+    function cleanSongName(oldName){
+        if(oldName.includes(" (") && oldName.includes(")")){
+          oldName = oldName.split(" (")[0];
+        }
+        if(oldName.includes(" - ")){
+          oldName = oldName.split(" - ")[0];
+        }
+        return oldName;
     }
   
     useEffect(() => {
-      setSongLoading(true);
-      getTracks(location.state.playlistId);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+        setSongLoading(true);
+        getTracks(location.state.playlistId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }  , []);
-
-    // useEffect(() => {
-    //   getTrackLyrics();
-    // }  , [songs]);
 
     return (
         <SpotifyApiContext.Provider value={props.token}>
