@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { SpotifyApiContext } from 'react-spotify-api'
 import { getLyrics } from 'genius-lyrics-api';
 import {
   Redirect,
   useLocation
 } from "react-router-dom";
+
+import SearchBar from './searchbar.js'
 
 
 const Search = (props) => {
@@ -13,8 +14,20 @@ const Search = (props) => {
     const [songLyrics, setSongLyrics] = useState([]);
     const [songLoading, setSongLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const filteredSongs = filterSongs(songLyrics, searchQuery);
 
     const spotifyApiLink = "https://api.spotify.com/v1/playlists/";
+
+    function filterSongs(entries, query){
+        if(query === ""){
+            return entries;
+        }
+        return entries.filter((entry) => {
+            const curLyrics = entry.lyrics;
+            return curLyrics != null && curLyrics.toLowerCase().includes(query.toLowerCase());
+
+        });
+    }
 
     // Necessary to access the "next" attribute in the paginated json and get more than 100 tracks
     async function getNext100(link){
@@ -103,13 +116,25 @@ const Search = (props) => {
     }  , []);
 
     return (
-        <SpotifyApiContext.Provider value={props.token}>
+      <div>
           {location.state ? (
             <div>
               <p>Songs length: {songs.length}</p>
               <p>Lyrics length: {songLyrics.length}</p>
+              <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
               <div>
                 {songLyrics.map(entry =>
+                  <details key={entry.name}>
+                      <summary>{entry.name}</summary>
+
+                      <p>{entry.lyrics}</p>
+                  </details>
+                )}
+              </div>
+              <p>Songs filtered by "{searchQuery}":</p>
+
+              <div>
+                {filteredSongs.map(entry =>
                   <details key={entry.name}>
                       <summary>{entry.name}</summary>
 
@@ -127,7 +152,7 @@ const Search = (props) => {
           ) : (
               <Redirect to="/playlists"/>
           )}
-        </SpotifyApiContext.Provider>
+      </div>
         
     );
 }
