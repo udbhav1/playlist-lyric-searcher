@@ -1,7 +1,5 @@
 import '../styles/App.css'
 import '../styles/background.sass'
-import githubLogo from '../images/github-logo.png'
-import backButton from '../images/back-button.png'
 import { SpotifyAuth} from 'react-spotify-auth'
 import Cookies from 'js-cookie'
 import {
@@ -12,9 +10,9 @@ import {
 } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 
-import Login from './login.js';
 import Playlists from './playlists.js';
 import Search from './search.js';
+import TopBar from './topBar.js';
 
 
 function App() {
@@ -49,14 +47,7 @@ function App() {
             <Route path="/playlists">
               {token ? (
                 <div>
-                  <div id="topBar">
-                    <a id="backButtonContainer" href="/">
-                      <img src={backButton} width="42" height="42" alt="Back Button" />
-                    </a>
-                    <a id="githubLogoContainer" href="https://github.com/udbhav1/playlist-lyric-searcher">
-                      <img src={githubLogo} width="42" height="42" alt="Github Logo"/>
-                    </a>
-                  </div>
+                  <TopBar backButton={true} />
 
                   <button onClick={deleteCookie}>
                     Logout
@@ -72,14 +63,7 @@ function App() {
             <Route path="/search">
               {token ? (
                 <div>
-                  <div id="topBar">
-                    <a id="backButtonContainer" href="/playlists">
-                      <img src={backButton} width="42" height="42" alt="Back Button" />
-                    </a>
-                    <a id="githubLogoContainer" href="https://github.com/udbhav1/playlist-lyric-searcher">
-                      <img src={githubLogo} width="42" height="42" alt="Github Logo"/>
-                    </a>
-                  </div>
+                  <TopBar backButton={true} />
 
                   <button onClick={deleteCookie}>
                     Logout
@@ -97,22 +81,20 @@ function App() {
                   <Redirect to="/playlists"/>
                 ) : (
                   <div>
-                    <div id="topBar">
-                      <a id="githubLogoContainer" href="https://github.com/udbhav1/playlist-lyric-searcher">
-                        <img src={githubLogo} width="42" height="42" alt="Github Logo"/>
-                      </a>
-                    </div>
+                    <TopBar backButton={false} />
 
-                    <Login>
-                      <div className="spotifyLoginContainer">
-                        <SpotifyAuth
-                          className="spotifyLoginButton"
-                          redirectUri={'http://localhost:5000'}
-                          clientID={process.env.REACT_APP_SPOTIFY_CLIENT_ID}
-                          scopes={['playlist-read-collaborative', 'playlist-read-private', 'user-library-read']}
-                        />
-                      </div>
-                    </Login>
+                    <div className="siteName">
+                        <h1 className="bigText"><strong>Playlist Lyric Searcher</strong></h1>
+
+                        <div className="spotifyLoginContainer">
+                          <SpotifyAuth
+                            className="spotifyLoginButton"
+                            redirectUri={'http://localhost:5000'}
+                            clientID={process.env.REACT_APP_SPOTIFY_CLIENT_ID}
+                            scopes={['playlist-read-collaborative', 'playlist-read-private', 'user-library-read']}
+                          />
+                        </div>
+                    </div>
                   </div>
                 )}
             </Route>

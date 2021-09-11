@@ -5,7 +5,7 @@ import {
   useLocation
 } from "react-router-dom";
 
-import SearchBar from './searchbar.js'
+import SearchBar from './searchBar.js'
 
 
 const Search = (props) => {
@@ -17,6 +17,24 @@ const Search = (props) => {
     const filteredSongs = filterSongs(songLyrics, searchQuery);
 
     const spotifyApiLink = "https://api.spotify.com/v1/playlists/";
+
+    function makeSongObject(songName, songArtist, songId){
+        return {name: songName, artist: songArtist, id: songId};
+    }
+
+    function makeLyricsObject(songName, songLyrics, songId){
+        return {name: songName, lyrics: songLyrics, id: songId};
+    }
+
+    function cleanSongName(oldName){
+        if(oldName.includes(" (") && oldName.includes(")")){
+          oldName = oldName.split(" (")[0];
+        }
+        if(oldName.includes(" - ")){
+          oldName = oldName.split(" - ")[0];
+        }
+        return oldName;
+    }
 
     function filterSongs(entries, query){
         if(query === ""){
@@ -91,24 +109,6 @@ const Search = (props) => {
         getLyrics(geniusOptions).then((lyrics) => setSongLyrics(oldArray => [...oldArray, makeLyricsObject(trackName, lyrics, trackId)]));
     }
 
-    function makeSongObject(songName, songArtist, songId){
-        return {name: songName, artist: songArtist, id: songId};
-    }
-
-    function makeLyricsObject(songName, songLyrics, songId){
-        return {name: songName, lyrics: songLyrics, id: songId};
-    }
-
-    function cleanSongName(oldName){
-        if(oldName.includes(" (") && oldName.includes(")")){
-          oldName = oldName.split(" (")[0];
-        }
-        if(oldName.includes(" - ")){
-          oldName = oldName.split(" - ")[0];
-        }
-        return oldName;
-    }
-  
     useEffect(() => {
         setSongLoading(true);
         getTracks(location.state.playlistId);
