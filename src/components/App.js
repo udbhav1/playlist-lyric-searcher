@@ -1,14 +1,16 @@
 import '../styles/App.css'
 import '../styles/background.sass'
+import githubLogo from '../images/github-logo.png'
+import backButton from '../images/back-button.png'
 import { SpotifyAuth} from 'react-spotify-auth'
 import Cookies from 'js-cookie'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect
 } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
 
 import Login from './login.js';
 import Playlists from './playlists.js';
@@ -16,8 +18,22 @@ import Search from './search.js';
 
 
 function App() {
-  const token = Cookies.get('spotifyAuthToken');
-  console.log("Spotify Auth Token: " + token);
+
+  const [token, setToken] = useState(null);
+
+  // delete token on logout
+  function deleteCookie(){
+    Cookies.remove('spotifyAuthToken');
+    setToken(null);
+  }
+
+  // re render if token changes
+  useEffect(() => {
+      setToken(Cookies.get('spotifyAuthToken'));
+      console.log("Spotify Auth Token: " + token);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }  , [token]);
+
   return (
 
     <Router>
@@ -33,16 +49,19 @@ function App() {
             <Route path="/playlists">
               {token ? (
                 <div>
-                  {/* <nav> */}
-                  {/*   <ul> */}
-                  {/*       <li> */}
-                  {/*         <Link to="/search">Search</Link> */}
-                  {/*       </li> */}
-                  {/*       <li> */}
-                  {/*         <Link to="/">Home</Link> */}
-                  {/*       </li> */}
-                  {/*   </ul> */}
-                  {/* </nav> */}
+                  <div id="topBar">
+                    <a id="backButtonContainer" href="/">
+                      <img src={backButton} width="42" height="42" alt="Back Button" />
+                    </a>
+                    <a id="githubLogoContainer" href="https://github.com/udbhav1/playlist-lyric-searcher">
+                      <img src={githubLogo} width="42" height="42" alt="Github Logo"/>
+                    </a>
+                  </div>
+
+                  <button onClick={deleteCookie}>
+                    Logout
+                  </button>
+
                   <Playlists token={token}/>
                 </div>
               ) : (
@@ -53,17 +72,18 @@ function App() {
             <Route path="/search">
               {token ? (
                 <div>
-                  <nav>
-                    <ul>
-                      <li>
-                        <Link to="/playlists">Playlists</Link>
-                      </li>
-                      <li>
-                        <Link to="/">Home</Link>
-                      </li>
-                    </ul>
-                  </nav>
+                  <div id="topBar">
+                    <a id="backButtonContainer" href="/playlists">
+                      <img src={backButton} width="42" height="42" alt="Back Button" />
+                    </a>
+                    <a id="githubLogoContainer" href="https://github.com/udbhav1/playlist-lyric-searcher">
+                      <img src={githubLogo} width="42" height="42" alt="Github Logo"/>
+                    </a>
+                  </div>
 
+                  <button onClick={deleteCookie}>
+                    Logout
+                  </button>
                   <Search token={token}/>
                 </div>
               ) : (
@@ -76,6 +96,13 @@ function App() {
                 {token ? (
                   <Redirect to="/playlists"/>
                 ) : (
+                  <div>
+                    <div id="topBar">
+                      <a id="githubLogoContainer" href="https://github.com/udbhav1/playlist-lyric-searcher">
+                        <img src={githubLogo} width="42" height="42" alt="Github Logo"/>
+                      </a>
+                    </div>
+
                     <Login>
                       <div className="spotifyLoginContainer">
                         <SpotifyAuth
@@ -86,6 +113,7 @@ function App() {
                         />
                       </div>
                     </Login>
+                  </div>
                 )}
             </Route>
 

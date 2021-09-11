@@ -54,7 +54,7 @@ html {
 
 .siteName {
   text-align: center;
-  margin-top: 15%;
+  margin-top: 10%;
 }
 
 .playlistName {
@@ -62,9 +62,32 @@ html {
   margin-bottom: 5px;
 }
 
+#topBar{
+  position: relative;
+  overflow: auto;
+}
+
+#backButtonContainer{
+  float: left;
+  background-color: white;
+  margin-left: 20px;
+  margin-top: 16px;
+  height: 42px;
+  border-radius: 20%;
+}
+
+#githubLogoContainer{
+  float: right;
+  margin-right: 20px;
+  margin-top: 15px;
+}
+
 img {
   z-index: 20;
   object-fit: cover;
+}
+
+.playlistImg {
   width: 200px;
   height: 200px;
 }
@@ -86,6 +109,7 @@ summary {
   font-size: 60px;
   /* text-shadow: 0px 0px 125px #d3d3d3; */
   text-shadow: 0px 0px 20px #696969;
+  margin-top: 10px;
 }
 
 .loader {

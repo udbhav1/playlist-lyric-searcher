@@ -22,7 +22,7 @@ const Playlists = (props) => {
               playlists.data.items.map(playlist => (
 
                 <div key={playlist.uri} className="playlist" onClick={() => playlistClick(playlist.id)}>
-                  <img key={playlist.href} src={playlist.images[0].url} alt={"Image for '" + playlist.name + "'"}/>
+                  <img className="playlistImg" key={playlist.href} src={playlist.images[0].url} alt={"Image for '" + playlist.name + "'"}/>
                   <p key={playlist.id} className="playlistName"><strong>{playlist.name}</strong></p>
                 </div>
 
