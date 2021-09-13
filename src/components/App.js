@@ -47,11 +47,7 @@ function App() {
             <Route path="/playlists">
               {token ? (
                 <div>
-                  <TopBar backButton={true} />
-
-                  <button onClick={deleteCookie}>
-                    Logout
-                  </button>
+                  <TopBar backButton={false} logout={true} deleteFunc={deleteCookie}/>
 
                   <Playlists token={token}/>
                 </div>
@@ -63,12 +59,10 @@ function App() {
             <Route path="/search">
               {token ? (
                 <div>
-                  <TopBar backButton={true} />
+                  <TopBar backButton={true} logout={true} deleteFunc={deleteCookie}/>
 
-                  <button onClick={deleteCookie}>
-                    Logout
-                  </button>
                   <Search token={token}/>
+
                 </div>
               ) : (
                   <Redirect to="/"/>
@@ -81,7 +75,7 @@ function App() {
                   <Redirect to="/playlists"/>
                 ) : (
                   <div>
-                    <TopBar backButton={false} />
+                    <TopBar backButton={false} logout={false} deleteFunc={deleteCookie}/>
 
                     <div className="siteName">
                         <h1 className="bigText"><strong>Playlist Lyric Searcher</strong></h1>

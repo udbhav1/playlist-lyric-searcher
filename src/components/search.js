@@ -122,20 +122,11 @@ const Search = (props) => {
               <p>Songs length: {songs.length}</p>
               <p>Lyrics length: {songLyrics.length}</p>
               <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-              <div>
-                {songLyrics.map(entry =>
-                  <details key={entry.name}>
-                      <summary>{entry.name}</summary>
-
-                      <p>{entry.lyrics}</p>
-                  </details>
-                )}
-              </div>
               <p>Songs filtered by "{searchQuery}":</p>
 
               <div>
                 {filteredSongs.map(entry =>
-                  <details key={entry.name}>
+                  <details key={entry.id}>
                       <summary>{entry.name}</summary>
 
                       <p>{entry.lyrics}</p>
