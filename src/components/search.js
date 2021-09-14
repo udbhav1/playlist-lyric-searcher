@@ -121,7 +121,9 @@ const Search = (props) => {
             <div>
               <p>Songs length: {songs.length}</p>
               <p>Lyrics length: {songLyrics.length}</p>
-              <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+              <div id="searchBarContainer">
+                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+              </div>
               <p>Songs filtered by "{searchQuery}":</p>
 
               <div>
