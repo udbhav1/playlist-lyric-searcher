@@ -4,6 +4,8 @@ React web app to search for specific lyrics in your Spotify playlists.
 
 ## Gallery
 
+![homepage](./assets/homepage.png)
+
 ## Development
 
 ```
