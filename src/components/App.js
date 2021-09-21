@@ -83,7 +83,7 @@ function App() {
                         <div className="spotifyLoginContainer">
                           <SpotifyAuth
                             className="spotifyLoginButton"
-                            redirectUri={'http://localhost:5000'}
+                            redirectUri={'https://playlist-lyric-searcher.vercel.app/'}
                             clientID={process.env.REACT_APP_SPOTIFY_CLIENT_ID}
                             scopes={['playlist-read-collaborative', 'playlist-read-private', 'user-library-read']}
                           />
