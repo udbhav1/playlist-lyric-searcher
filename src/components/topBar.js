@@ -14,7 +14,7 @@ const TopBar = (props) => (
       {props.logout &&
         <Button id="logoutButton" onClick={() => props.deleteFunc()}><b>Logout</b></Button>
       }
-      <a id="githubLogoContainer" href="https://github.com/udbhav1/playlist-lyric-searcher">
+      <a id="githubLogoContainer" href="https://github.com/udbhav1/playlist-lyric-searcher" target="_blank" rel="noreferrer">
         <img src={githubLogo} width="42" height="42" alt="Github Logo"/>
       </a>
     </div>

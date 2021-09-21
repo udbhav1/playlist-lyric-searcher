@@ -1,3 +1,4 @@
+import '../styles/App.css'
 import React, { useEffect, useState } from 'react';
 import { getLyrics } from 'genius-lyrics-api';
 import {
@@ -121,26 +122,33 @@ const Search = (props) => {
             <div>
               <p>Songs length: {songs.length}</p>
               <p>Lyrics length: {songLyrics.length}</p>
+
               <div id="searchBarContainer">
                 <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
               </div>
+
               <p>Songs filtered by "{searchQuery}":</p>
 
               <div>
                 {filteredSongs.map(entry =>
-                  <details key={entry.id}>
-                      <summary>{entry.name}</summary>
+                  <div id="searchResult">
+                    <details key={entry.id}>
+                        <summary>{entry.name}</summary>
 
-                      <p>{entry.lyrics}</p>
-                  </details>
+                        <p>{entry.lyrics}</p>
+                    </details>
+                  </div>
                 )}
               </div>
+
+              <div className="loader"></div>
 
               {songLoading ? (
                 <div className="loader"></div>
               ) : (
                 <p>done</p>
               )}
+
             </div>
           ) : (
               <Redirect to="/playlists"/>
