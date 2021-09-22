@@ -16,7 +16,7 @@ const Search = (props) => {
     // const [songLoading, setSongLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [totalSongs, setTotalSongs] = useState(0);
-    const filteredSongs = filterSongs(songLyrics, searchQuery);
+    const filteredSongs = constructJSX(filterSongs(songLyrics, searchQuery), searchQuery);
 
     const spotifyApiLink = "https://api.spotify.com/v1/playlists/";
 
@@ -51,6 +51,53 @@ const Search = (props) => {
             return curLyrics != null && curLyrics.join(" ").toLowerCase().includes(query.toLowerCase());
 
         });
+    }
+
+    // returns jsx of a line with the search query highlighted
+    function highlightTerm(line, lineIndex, query){
+        if(line == null){
+          return <p key={lineIndex}></p>;
+        }
+        // check if just whitespace
+        if(!(/\S/.test(query))) {
+          return <p key={lineIndex}>{line}</p>;
+        }
+        // best way to preserve case while searching case insensitive
+        let reg = new RegExp(query, 'gi');
+        // arbitrary delimiter string that wont occur in song lyrics
+        let delim = "、";
+        let searchedStr = line.replace(reg, function(s) { return delim + s + delim } );
+        let splitStr = searchedStr.split(/(、)/g);
+
+        let finalJSX = []
+        for(let i = 0; i < splitStr.length; i++){
+          if(splitStr[i] === delim){
+            finalJSX.push(<mark key={i.toString() + lineIndex.toString()}>{splitStr[i+1]}</mark>);
+            i+=2;
+          }
+          else{
+            finalJSX.push(<span key={lineIndex.toString() + i.toString()}>{splitStr[i]}</span>);
+          }
+        }
+        return <p key={lineIndex}>{finalJSX}</p>;
+    }
+
+    // returns the final jsx for search results
+    function constructJSX(entries, query){
+        return (entries.map((entry, songIndex) =>
+              <div id="searchResult" key={entry.id}>
+                  <details>
+                      <summary id="songTitle"><b>{entry.name}</b> - {entry.artist}</summary>
+
+                      <hr/> 
+
+                      {entry.lyrics.map((line, lineIndex) =>
+                          highlightTerm(line, lineIndex, query)
+                      )}
+                  </details>
+              </div>
+            )
+        )
     }
 
     // Necessary to access the "next" attribute in the paginated json and get more than 100 tracks
@@ -138,19 +185,8 @@ const Search = (props) => {
                 </div>
               }
 
-                {filteredSongs.map(entry =>
-                  <div id="searchResult" key={entry.id}>
-                    <details>
-                        <summary id="songTitle"><b>{entry.name}</b> - {entry.artist}</summary>
+              {filteredSongs}
 
-                        <hr/> 
-
-                        {entry.lyrics.map((line, index) =>
-                            <p key={index}>{line}</p>
-                        )}
-                    </details>
-                  </div>
-                )}
 
             </div>
           ) : (
