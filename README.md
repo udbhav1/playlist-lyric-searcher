@@ -24,6 +24,8 @@ REACT_APP_SPOTIFY_CLIENT_SECRET = ''
 REACT_APP_GENIUS_TOKEN = ''
 PORT=5000
 ```
+Then, if you're testing on localhost, swap the comment status of lines 86 and 87 in `src/components/App.js` to set the correct redirect url.
+
 Finally,
 ```
 npm start
