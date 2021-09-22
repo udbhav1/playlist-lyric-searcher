@@ -2,9 +2,12 @@
 
 React web app to search for specific lyrics in your Spotify playlists.
 
-## Gallery
+## Demo
 
-![homepage](./assets/homepage.png)
+<!-- ![homepage](./assets/homepage.png) -->
+<p align="center">
+  <img width="800" src="./assets/playlist-demo.gif">
+</p>
 
 ## Development
 
@@ -28,5 +31,5 @@ npm start
 
 ## Notes
 
-- Testing on localhost requires you to disable Same-Origin Policy in your browser to avoid a CORS error. Either install an extension for Chrome or follow the instructions [here](https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome).
+- Unfortunately, the Genius API library requires you to disable Same-Origin Policy in your browser to avoid a CORS error. Either install an extension for Chrome or follow the instructions [here](https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome).
 - The Genius API does not explicitly support lyric fetching. Instead, the app manually scrapes each Genius page, so you may run into rate-limit errors with especially large playlists (>1000 songs).
